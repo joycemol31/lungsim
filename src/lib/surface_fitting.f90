@@ -4,7 +4,8 @@ module surface_fitting
   use other_consts
   use mesh_functions
   !use precision
-  use solve
+  use solve,only: solve_linear_system
+
 
   implicit none
 
@@ -1416,7 +1417,13 @@ contains
     
     !-------------- solve reduced system of linear equations ---------------
     !Commented out since subroutines called further are temporarily unavailable
-    !call solve_linear_system(NOT_1,NOT_1,NOT_2,num_depvar,GKK,GRR,incr_soln,FIRST_A)
+   !write (*,*) NOT_1, NOT_2, num_depvar
+   !stop
+   call solve_linear_system(NOT_1,NOT_1,NOT_2,num_depvar,GKK,GRR,incr_soln,FIRST_A)
+     ! call pmgmres_ilu_cr(NOT_1, num_depvar, GKK(NOT_1), GKK(NOT_2), GKK, &
+     !    incr_soln, GRR, 500, 500,1.d-5,1.d-4,FIRST_A)
+   !write (*,*) NOT_1
+
     
     do no1=1,NOT_2 ! for each unknown
        do nyo1=1,nyno(0,no1,2)
@@ -1670,9 +1677,5 @@ contains
     endif
     
   end subroutine project_orthogonal
-
-!!! ##########################################################################      
-  
-
 
 end module surface_fitting
